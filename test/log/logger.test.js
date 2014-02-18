@@ -1,7 +1,14 @@
 /*jshint expr: true*/
-var logger = require('../../../src/lib/log/logger.js');
-var helper = require('../../testHelpers.js');
-var ErrorEvent = window.ErrorEvent || require('../../lib/ErrorEvent.js');
+var logger = require('../../src/log/logger.js');
+var ErrorEvent = window.ErrorEvent || require('../lib/ErrorEvent.js');
+
+function undefine(obj, prop) {
+    var org = obj[prop];
+    obj[prop] = undefined;
+    return function restore() {
+        obj[prop] = org;
+    };
+}
 
 describe('logger', function () {
 	it('should default logLevel to 0 if not undefined', function () {
@@ -48,7 +55,7 @@ describe('logger', function () {
             filename: 'http://gardrtest.com/errorTest.js',
             lineno: 123
         };
-        var restoreOnError = helper.undefine(window, 'onerror');
+        var restoreOnError = undefine(window, 'onerror');
         var evt = new ErrorEvent('error', errorData);
         window.dispatchEvent(evt);
         restoreOnError();

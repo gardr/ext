@@ -1,4 +1,4 @@
-var inside = require('../src/index.js');
+var inside = require('../src/inside.js');
 
 var example_hash = '#GARDR_|_pos-id_|_key=MANAGER&origin=http%3A%2F%2Fgardr.github.io_|_name=posname&minSize=100&timeout=200&url=http%3A%2F%2Fgardr.github.io%2Fad%7C123&height=225';
 
@@ -28,8 +28,9 @@ describe('inside', function () {
 	});
 
 	it('should log to div by default', function () {
+		location.hash += '&loglevel=4';
 		inside();
-
+		gardr.log.debug('test');
 		var logDiv = document.getElementById('logoutput');
 		expect(logDiv).to.exist;
 	});
