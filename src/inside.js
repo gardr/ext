@@ -9,12 +9,12 @@ var inside = function () {
 
 	extend(gardr, hashData.decode(global.location.hash));
 	gardr.log = logger.create(gardr.id, gardr.params.loglevel, getAppender(gardr.params.logto));
-	debugger
-	gardr.log.debug('Banner init');
-
+	
 	// TODO requestAnimationFrame polyfill
 	global.gardr = gardr;
 
+	console.log('Loading url: ' + gardr.params.url);
+	document.write(['<scr', 'ipt src=\'', gardr.params.url, '\' ></scr', 'ipt>'].join(''));
 };
 
 inside._xde = xde;
