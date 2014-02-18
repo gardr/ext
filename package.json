@@ -1,0 +1,37 @@
+{
+  "name": "gardr-inside",
+  "version": "0.0.0",
+  "description": "The js part of Gardr which is inside the iframe",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/karma/bin/karma start --single-run"
+  },
+  "keywords": [
+    "gardr"
+  ],
+  "author": "FINN.no AS",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "~1.9.0",
+    "karma-chai": "~0.1.0",
+    "mocha": "~1.17.1",
+    "karma-mocha": "~0.1.1",
+    "sinon": "~1.8.2",
+    "karma-sinon": "~1.0.2",
+    "karma-script-launcher": "~0.1.0",
+    "karma-chrome-launcher": "~0.1.2",
+    "karma-firefox-launcher": "~0.1.3",
+    "karma-html2js-preprocessor": "~0.1.0",
+    "karma-coffee-preprocessor": "~0.1.3",
+    "requirejs": "~2.1.11",
+    "karma-requirejs": "~0.2.1",
+    "karma-phantomjs-launcher": "~0.1.2",
+    "karma": "~0.10.9",
+    "browserify": "~3.30.1",
+    "karma-browserify": "~0.1.0"
+  },
+  "dependencies": {
+    "gardr-iframe-params": "0.0.1",
+    "util-extend": "~1.0.1"
+  }
+}
