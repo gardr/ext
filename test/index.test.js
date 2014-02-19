@@ -23,7 +23,7 @@ function triggerOnLoad () {
     window.dispatchEvent(evt);
 }
 
-describe('inside', function () {
+describe('Garðr ext - bootStrap', function () {
     var orgWrite = document.write;
     var comClient;
     var com;
@@ -77,7 +77,7 @@ describe('inside', function () {
 
     it('should trigger comClient.rendered when all resources are loaded', function () {
         bootStrap(exampleHash);
-        
+
         expect(comClient).to.have.been.calledOnce;
         expect(comClient).to.have.been.calledWith(window.top, 'http://gardr.github.io');
 
