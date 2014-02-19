@@ -76,11 +76,11 @@ describe('inside', function () {
 	it('should trigger comClient.rendered when all resources are loaded', function () {
 		bootStrap(example_hash);
 		
-		expect(comClient.calledOnce).to.be.true;
-		expect(comClient.calledWith(window.top, 'http://gardr.github.io'));
+		expect(comClient).to.have.been.calledOnce;
+		expect(comClient).to.have.been.calledWith(window.top, 'http://gardr.github.io');
 
 		triggerOnLoad();
 
-        expect(com.rendered.calledOnce).to.be.true;
+        expect(com.rendered).to.have.been.calledOnce;
 	});
 });
