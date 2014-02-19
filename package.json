@@ -13,6 +13,10 @@
     "ads",
     "third-party"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:gardr/ext.git"
+  },
   "author": "FINN.no AS",
   "contributors": [
     "Gregers Rygg <gregers@finn.no>",
@@ -42,6 +46,7 @@
   "dependencies": {
     "gardr-iframe-params": "0.0.1",
     "util-extend": "~1.0.1",
-    "eventlistener": "0.0.1"
+    "eventlistener": "0.0.1",
+    "cross-domain-events": "0.0.1"
   }
 }
