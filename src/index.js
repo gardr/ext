@@ -7,18 +7,19 @@ var logger      = require('./log/logger.js');
 var eventListener = require('eventlistener');
 
 var bootStrap = function (hash) {
+    hash = hash || global.location.hash;
     var gardr = {};
     global.gardr = gardr;
 
     extend(gardr, hashData.decode(hash));
     gardr.log = logger.create(gardr.id, gardr.params.loglevel, getAppender(gardr.params.logto));
-    
+
     // TODO requestAnimationFrame polyfill
 
     gardr.log.debug('Loading url: ' + gardr.params.url);
     document.write(['<scr', 'ipt src=\'', gardr.params.url, '\' ></scr', 'ipt>'].join(''));
 
-    var com = comClient(window.top, gardr.internal.origin);
+    var com = comClient(gardr.id, window.top, gardr.internal.origin);
     eventListener.add(global, 'load', function () {
         com.rendered();
     });
@@ -29,7 +30,3 @@ bootStrap._setComClient = function (client) {
 };
 
 module.exports = bootStrap;
-
-if (global.location.hash) {
-    bootStrap(global.location.hash);
-}

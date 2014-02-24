@@ -1,10 +1,11 @@
 var xde = require('cross-domain-events');
+var extend = require('util-extend');
 
-function rendered (targetWindow, opts) {
-    xde.sendTo(targetWindow, 'rendered', opts);
+function rendered (posId, targetWindow, opts) {
+    xde.sendTo(targetWindow, 'rendered', extend(opts || {}, {id: posId}));
 }
 
-function comClient (targetWindow, origin) {
+function comClient (posId, targetWindow, origin) {
     if (typeof targetWindow !== 'object' || !window.postMessage) {
         throw new Error('targetWindow must be a Window object');
     }
@@ -15,7 +16,7 @@ function comClient (targetWindow, origin) {
 
     xde.targetOrigin = origin;
     return {
-        rendered : rendered.bind(null, targetWindow)
+        rendered : rendered.bind(null, posId, targetWindow)
     };
 }
 
