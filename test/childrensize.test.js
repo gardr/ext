@@ -1,3 +1,4 @@
+/* jshint expr: true */
 var childrenSize = require('../src/childrensize.js');
 var insertCss    = require('../src/style/insertCss.js');
 
