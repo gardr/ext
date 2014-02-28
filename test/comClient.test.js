@@ -22,16 +22,24 @@ describe('comClient', function () {
         expect(com).to.exist;
     });
 
-    it('should call xde.sendTo once when rendered is called', function() {
-        var com = comClient(id, win, origin);
-        com.rendered();
-        expect(xde.sendTo).to.have.been.calledOnce;
-    });
+    describe('rendered', function () {
+        it('should call xde.sendTo once', function() {
+            var com = comClient(id, win, origin);
+            com.rendered();
+            expect(xde.sendTo).to.have.been.calledOnce;
+        });
 
-    it('should call xde.sendTo with window, origin and ‘rendered’ as arguments', function() {
-        var com = comClient(id, win, origin);
-        com.rendered();
-        expect(xde.sendTo).to.have.been.calledWith(win, 'rendered', {id: id});
-        expect(xde.targetOrigin).to.equal(origin);
+        it('should call xde.sendTo with window, origin and ‘rendered’ as arguments', function() {
+            var com = comClient(id, win, origin);
+            com.rendered();
+            expect(xde.sendTo).to.have.been.calledWith(win, 'rendered', {id: id});
+            expect(xde.targetOrigin).to.equal(origin);
+        });
+
+        it('should call xde.sendTo with the opts object', function() {
+            var com = comClient(id, win, origin);
+            com.rendered({width: 20, height: 10});
+            expect(xde.sendTo).to.have.been.calledWith(win, 'rendered', {id: id, width: 20, height: 10});
+        });
     });
 });

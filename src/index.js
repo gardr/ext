@@ -5,6 +5,7 @@ var comClient   = require('./comClient.js');
 var getAppender = require('./log/getAppender.js');
 var logger      = require('./log/logger.js');
 var eventListener = require('eventlistener');
+var childrenSize  = require('./childrensize.js');
 
 var bootStrap = function (hash) {
     hash = hash || global.location.hash;
@@ -17,11 +18,14 @@ var bootStrap = function (hash) {
     // TODO requestAnimationFrame polyfill
 
     gardr.log.debug('Loading url: ' + gardr.params.url);
+    document.write('<span id="gardr">');
     document.write(['<scr', 'ipt src=\'', gardr.params.url, '\' ></scr', 'ipt>'].join(''));
+    document.write('</span>');
 
     var com = comClient(gardr.id, window.top, gardr.internal.origin);
     eventListener.add(global, 'load', function () {
-        com.rendered();
+        var size = childrenSize(document.getElementById('gardr'));
+        com.rendered(size);
     });
 };
 

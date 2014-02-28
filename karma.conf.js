@@ -14,6 +14,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'test/lib/Function-polyfill.js',
       'src/**/*.js',
       'test/**/*.js'
     ],
@@ -21,7 +22,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-      
+
     ],
 
 
