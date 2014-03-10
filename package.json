@@ -4,8 +4,10 @@
   "description": "The js part of Gardr which embeds external content inside the iframe",
   "main": "./src/index.js",
   "scripts": {
-    "lint": "./node_modules/.bin/jshint --reporter node_modules/jshint-stylish/stylish.js src test --exclude test/lib",
-    "test": "npm run lint && ./node_modules/karma/bin/karma start --single-run"
+    "lint"        : "./node_modules/.bin/jshint --reporter node_modules/jshint-stylish/stylish.js src test --exclude test/lib",
+    "test"        : "npm run lint && ./node_modules/karma/bin/karma start --single-run",
+    "dist"        : "mkdir -p dist && ./node_modules/.bin/browserify src/index.js -d -s gardr.ext -o dist/gardr.ext.js && ./node_modules/.bin/uglifyjs dist/gardr.ext.js -mc -o dist/gardr.ext.min.js",
+    "prepublish"  : "npm run test && npm run dist"
   },
   "keywords": [
     "gardr",
@@ -41,7 +43,8 @@
     "karma-browserify": "~0.1.0",
     "karma-sinon-chai": "~0.1.4",
     "jshint": "~2.4.3",
-    "jshint-stylish": "~0.1.5"
+    "jshint-stylish": "~0.1.5",
+    "uglify-js": "~2.4.12"
   },
   "dependencies": {
     "gardr-iframe-params": "0.0.1",
