@@ -1,13 +1,13 @@
 {
   "name": "gardr-ext",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The js part of Gardr which embeds external content inside the iframe",
   "main": "./src/index.js",
   "scripts": {
-    "lint"        : "./node_modules/.bin/jshint --reporter node_modules/jshint-stylish/stylish.js src test --exclude test/lib",
-    "test"        : "npm run lint && ./node_modules/karma/bin/karma start --single-run",
-    "dist"        : "mkdir -p dist && ./node_modules/.bin/browserify src/index.js -d -s gardr.ext -o dist/gardr.ext.js && ./node_modules/.bin/uglifyjs dist/gardr.ext.js -mc -o dist/gardr.ext.min.js",
-    "prepublish"  : "npm run test && npm run dist"
+    "lint": "./node_modules/.bin/jshint --reporter node_modules/jshint-stylish/stylish.js src test --exclude test/lib",
+    "test": "npm run lint && ./node_modules/karma/bin/karma start --single-run",
+    "dist": "mkdir -p dist && ./node_modules/.bin/browserify src/index.js -d -s gardr.ext -o dist/gardr.ext.js && ./node_modules/.bin/uglifyjs dist/gardr.ext.js -mc -o dist/gardr.ext.min.js",
+    "prepublish": "npm run test && npm run dist"
   },
   "keywords": [
     "gardr",
