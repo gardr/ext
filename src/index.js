@@ -24,8 +24,11 @@ var bootStrap = function (hash) {
 
     var com = comClient(gardr.id, window.parent, gardr.internal.origin);
     eventListener.add(global, 'load', function () {
-        var size = childrenSize(document.getElementById('gardr'));
-        com.rendered(size);
+        // phantomjs doesn't calculate sizes correctly unless we give it a break
+        setTimeout(function () {
+            var size = childrenSize(document.getElementById('gardr'));
+            com.rendered(size);
+        }, 0);
     });
 };
 

@@ -13,6 +13,7 @@ function makeHash (data) {
 }
 
 function triggerOnLoad () {
+    var clock = sinon.useFakeTimers();
     var evt;
     try {
         evt = new UIEvent('load');
@@ -21,6 +22,8 @@ function triggerOnLoad () {
         evt.initUIEvent('load', false, true, null);
     }
     window.dispatchEvent(evt);
+    clock.tick(10);
+    clock.restore();
 }
 
 describe('Garðr ext - bootStrap', function () {
