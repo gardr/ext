@@ -22,7 +22,7 @@ var bootStrap = function (hash) {
     document.write(['<scr', 'ipt src=\'', gardr.params.url, '\' ></scr', 'ipt>'].join(''));
     document.write('</span>');
 
-    var com = comClient(gardr.id, window.top, gardr.internal.origin);
+    var com = comClient(gardr.id, window.parent, gardr.internal.origin);
     eventListener.add(global, 'load', function () {
         var size = childrenSize(document.getElementById('gardr'));
         com.rendered(size);

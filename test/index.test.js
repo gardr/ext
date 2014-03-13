@@ -85,7 +85,7 @@ describe('Garðr ext - bootStrap', function () {
         bootStrap(exampleHash);
 
         expect(comClient).to.have.been.calledOnce;
-        expect(comClient).to.have.been.calledWith(gardr.id, window.top, 'http://gardr.github.io');
+        expect(comClient).to.have.been.calledWith(gardr.id, window.parent, 'http://gardr.github.io');
 
         triggerOnLoad();
 
