@@ -1,18 +1,16 @@
 /* jshint evil: true */
-var hashData    = require('gardr-iframe-params');
-var extend      = require('util-extend');
 var comClient   = require('./comClient.js');
 var getAppender = require('./log/getAppender.js');
 var logger      = require('./log/logger.js');
 var eventListener = require('eventlistener');
 var childrenSize  = require('./childrensize.js');
 
-var bootStrap = function (hash) {
-    hash = hash || global.location.hash;
+var bootStrap = function () {
     var gardr = {};
     global.gardr = gardr;
 
-    extend(gardr, hashData.decode(hash));
+    gardr.params = JSON.parse(window.name);
+    gardr.id = gardr.params.id;
     gardr.log = logger.create(gardr.id, gardr.params.loglevel, getAppender(gardr.params.logto));
 
     // TODO requestAnimationFrame polyfill
@@ -22,7 +20,7 @@ var bootStrap = function (hash) {
     document.write(['<scr', 'ipt src=\'', gardr.params.url, '\' ></scr', 'ipt>'].join(''));
     document.write('</span>');
 
-    var com = comClient(gardr.id, window.parent, gardr.internal.origin);
+    var com = comClient(gardr.id, window.parent, gardr.params.origin);
     eventListener.add(global, 'load', function () {
         // phantomjs doesn't calculate sizes correctly unless we give it a break
         setTimeout(function () {

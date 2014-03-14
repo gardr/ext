@@ -1,15 +1,19 @@
 /* jshint evil: true, expr: true */
 /* global gardr:false */
 var bootStrap = require('../src/index.js');
-var hashTemplate = '#GARDR_|_pos-id_|_key=MANAGER&origin=http%3A%2F%2Fgardr.github.io_|_name=posname&minSize=100&timeo\
-ut=200&url={url}&height=225';
-var exampleHash = hashTemplate.replace('{url}', 'data:text/javascript;plain,void(0);');
+var extend = require('util-extend');
+var defaultParams = {
+    id: 'pos-id',
+    name: 'posname',
+    minSize: 100,
+    timeout: 200,
+    url: 'data:text/javascript;plain,void(0);',
+    height: 225,
+    origin: 'http://gardr.github.io'
+};
 
-function makeHash (data) {
-    data = data || {};
-    return Object.keys(data).reduce(function (hash, key) {
-        return hash.replace('{' + key + '}', encodeURIComponent(data[key]));
-    }, hashTemplate);
+function setNameData (data) {
+    window.name = JSON.stringify(extend(extend({}, defaultParams), data));
 }
 
 function triggerOnLoad () {
@@ -39,45 +43,50 @@ describe('Garðr ext - bootStrap', function () {
             return com;
         });
         bootStrap._setComClient(comClient);
+        setNameData();
     });
 
     afterEach(function () {
         delete window.gardr;
         document.write = orgWrite;
+        window.name = null;
     });
 
     it('should define ‘gardr’ in global scope', function () {
-        bootStrap(exampleHash);
+        bootStrap();
 
         expect(window.gardr).to.exist;
     });
 
     it('should read parameters from location.href by default', function () {
-        bootStrap(makeHash({url: 'http://gardr.github.io/ad|123'}));
+        setNameData({url: 'http://gardr.github.io/ad|123'});
+        bootStrap();
 
         expect(gardr.params).to.exist;
         expect(gardr.id).to.equal('pos-id');
-        expect(gardr.internal.origin).to.equal('http://gardr.github.io');
+        expect(gardr.params.origin).to.equal('http://gardr.github.io');
         expect(gardr.params.url).to.equal('http://gardr.github.io/ad|123');
-        expect(gardr.params.timeout).to.equal('200');
+        expect(gardr.params.timeout).to.equal(200);
     });
 
     it('should log to div by default', function () {
-        bootStrap(exampleHash + '&loglevel=4');
+        setNameData({loglevel: 4});
+        bootStrap();
         gardr.log.debug('test');
         var logDiv = document.getElementById('logoutput');
         expect(logDiv).to.exist;
     });
 
     it('should document.write out a gardr container to the document', function () {
-        bootStrap(exampleHash);
+        bootStrap();
         document.write.should.have.been.calledWith('<span id="gardr">');
         document.write.should.have.been.calledWith('</span>');
     });
 
     it('should document.write a script tag with src equal to the input url', function() {
         var scriptUrl = 'http://external.com/script.js?q=1';
-        bootStrap(makeHash({url: scriptUrl}));
+        setNameData({url: scriptUrl});
+        bootStrap();
 
         document.write.should.have.been.calledWithMatch(function (value) {
             return value.indexOf('<script') >= 0 && value.indexOf(scriptUrl) >= 0;
@@ -85,7 +94,7 @@ describe('Garðr ext - bootStrap', function () {
     });
 
     it('should trigger comClient.rendered when all resources are loaded', function () {
-        bootStrap(exampleHash);
+        bootStrap();
 
         expect(comClient).to.have.been.calledOnce;
         expect(comClient).to.have.been.calledWith(gardr.id, window.parent, 'http://gardr.github.io');
@@ -96,7 +105,7 @@ describe('Garðr ext - bootStrap', function () {
     });
 
     it('should detect the size of the rendered banner', function () {
-        bootStrap(exampleHash);
+        bootStrap();
         var el = document.body.appendChild(document.createElement('span'));
         el.id = 'gardr';
         el.innerHTML = '<span style="width:20px;height:10px;margin:0;padding:0;display:inline-block;">x</span>';
