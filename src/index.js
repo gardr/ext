@@ -6,10 +6,10 @@ var eventListener = require('eventlistener');
 var childrenSize  = require('./childrensize.js');
 
 var bootStrap = function () {
-    var gardr = {};
-    global.gardr = gardr;
+    var gardr = global.gardr || {};
+    if (!global.gardr) { global.gardr = gardr; }
 
-    gardr.params = JSON.parse(window.name);
+    gardr.params = gardr.params || JSON.parse(window.name);
     gardr.id = gardr.params.id;
     gardr.log = logger.create(gardr.id, gardr.params.loglevel, getAppender(gardr.params.logto));
 

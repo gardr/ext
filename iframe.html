@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="robots" content="none" />
+    <title>gardr ext</title>
+    <style>* { padding: 0; margin: 0; border: 0; }</style>
+    <script>var gardr = { params: JSON.parse(window.name) };</script>
+    <!--[if lt IE 9]>
+        <script>
+            document.write(['<scr','ipt src=\'',
+                gardr.params.es5shimUrl || '//cdnjs.cloudflare.com/ajax/libs/es5-shim/2.1.0/es5-shim.min.js',
+                '\'></scr','ipt>'].join(''));
+        </script>
+    <![endif]-->
+</head>
+<body>
+    <script>
+        document.write(['<scr', 'ipt src=\'', gardr.params.extScriptUrl, '\'></scr', 'ipt>'].join(''));
+    </script>
+</body>
+</html>
