@@ -1,9 +1,15 @@
 var computedStyle = require('computed-style');
 
+function toArray (nodeList) {
+    var arr = [];
+    for (var i=0, l=nodeList.length; i<l; i++) { arr.push(nodeList[i]); }
+    return arr;
+}
+
 module.exports = function(container) {
     if (!container) { return; }
 
-    var children = [].slice.call(container.children, 0).filter(function (el) {
+    var children = toArray(container.children).filter(function (el) {
         var pos = computedStyle(el, 'position');
         el.rect = el.getBoundingClientRect(); // store rect for later
         return !(
