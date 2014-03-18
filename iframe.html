@@ -6,17 +6,16 @@
     <meta name="robots" content="none" />
     <title>gardr ext</title>
     <style>* { padding: 0; margin: 0; border: 0; }</style>
-    <script>var gardr = { params: JSON.parse(window.name) };</script>
-    <!--[if lt IE 9]>
-        <script>
-            document.write(['<scr','ipt src=\'',
-                gardr.params.es5shimUrl || '//cdnjs.cloudflare.com/ajax/libs/es5-shim/2.1.0/es5-shim.min.js',
-                '\'></scr','ipt>'].join(''));
-        </script>
-    <![endif]-->
 </head>
 <body>
     <script>
+        var gardr = { params: JSON.parse(window.name) };
+        var es5shim = ['<scr','ipt src=\'',
+                (gardr.params.es5shimUrl ||'//cdnjs.cloudflare.com/ajax/libs/es5-shim/2.1.0/es5-shim.min.js'),
+                '\'></scr','ipt>'].join('');
+        if (!Function.prototype.bind) {
+            document.write(es5shim);
+        }
         document.write(['<scr', 'ipt src=\'', gardr.params.extScriptUrl, '\'></scr', 'ipt>'].join(''));
     </script>
 </body>
