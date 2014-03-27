@@ -1,5 +1,5 @@
 /*jshint expr: true*/
-var logger = require('../../src/log/logger.js');
+var logger = require('../../lib/log/logger.js');
 var ErrorEvent = window.ErrorEvent || require('../lib/ErrorEvent.js');
 
 function undefine(obj, prop) {

@@ -1,5 +1,5 @@
 /* jshint expr: true */
-var comClient   = require('../src/comClient.js');
+var comClient   = require('../lib/comClient.js');
 
 describe('comClient', function () {
     var id = 'pos_id', win = window.top, origin = 'http://www.someorigin.com';

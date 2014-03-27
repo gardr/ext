@@ -1,6 +1,6 @@
 /* jshint evil: true, expr: true */
 /* global gardr:false */
-var bootStrap = require('../src/index.js');
+var bootStrap = require('../lib/index.js');
 var extend = require('util-extend');
 var defaultParams = {
     id: 'pos-id',

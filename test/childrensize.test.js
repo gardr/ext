@@ -1,6 +1,6 @@
 /* jshint expr: true */
-var childrenSize = require('../src/childrensize.js');
-var insertCss    = require('../src/style/insertCss.js');
+var childrenSize = require('../lib/childrensize.js');
+var insertCss    = require('../lib/style/insertCss.js');
 
 function createElement (tag, width, height) {
     var div = document.createElement(tag);
