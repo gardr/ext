@@ -2,6 +2,7 @@
 /* global gardr:false */
 var bootStrap = require('../lib/index.js');
 var extend = require('util-extend');
+var pluginCore = require('gardr-core-plugin');
 var defaultParams = {
     id: 'pos-id',
     name: 'posname',
@@ -42,9 +43,15 @@ describe('Garðr ext - bootStrap', function () {
     var orgWrite = document.write;
     var comClient;
     var com;
+    var injected = [];
 
     beforeEach(function () {
-        document.write = sinon.spy();
+        document.write = sinon.spy(function (str) {
+            var tmp = document.createElement('span');
+            tmp.innerHTML = str;
+            injected.push(tmp.children[0]);
+            document.body.appendChild(tmp.children[0]);
+        });
 
         comClient = sinon.spy(function () {
             com = {rendered: sinon.spy()};
@@ -58,6 +65,9 @@ describe('Garðr ext - bootStrap', function () {
         delete window.gardr;
         document.write = orgWrite;
         window.name = null;
+        injected.forEach(function (el) {
+            el.parentElement && el.parentElement.removeChild(el);
+        });
         document.location.hash = '#';
     });
 
@@ -100,8 +110,7 @@ describe('Garðr ext - bootStrap', function () {
 
     it('should document.write out a gardr container to the document', function () {
         bootStrap();
-        document.write.should.have.been.calledWith('<span id="gardr">');
-        document.write.should.have.been.calledWith('</span>');
+    document.write.should.have.been.calledWithMatch(/<span id="gardr"><scr.pt src=".*"\s*><\/scr.pt><\/span>/);
     });
 
     it('should document.write a script tag with src equal to the input url', function() {
@@ -127,12 +136,70 @@ describe('Garðr ext - bootStrap', function () {
 
     it('should detect the size of the rendered banner', function () {
         bootStrap();
-        var el = document.body.appendChild(document.createElement('span'));
-        el.id = 'gardr';
-        el.innerHTML = '<span style="width:20px;height:10px;margin:0;padding:0;display:inline-block;">x</span>';
+        var el = document.getElementById('gardr');
+        var span = document.createElement('span');
+        span.innerHTML = '<span style="width:20px;height:10px;margin:0;padding:0;display:inline-block;">x</span>';
+        el.appendChild(span);
         triggerOnLoad();
         expect(com.rendered).to.have.been.calledWithMatch(function (obj) {
             return typeof obj.width === 'number' && typeof obj.height === 'number';
+        });
+    });
+
+    describe('plugins', function () {
+        it('should allow to register plugins', function () {
+            expect(function () {
+                bootStrap.plugin(function () {});
+            }).not.to.throw();
+        });
+
+        it('should initialize plugins', function () {
+            var spy = sinon.spy();
+            bootStrap.plugin(spy);
+            bootStrap();
+            expect(spy).to.have.been.calledOnce;
+            expect(spy).to.have.been.calledWithMatch(function (api) {
+                return api instanceof pluginCore.PluginApi;
+            });
+        });
+
+        it('should trigger params:parsed', function () {
+            var spy = sinon.spy();
+            bootStrap.plugin(function (api) {
+                api.on('params:parsed', spy);
+            });
+            setNameData({foo: 'bar'});
+            bootStrap();
+            expect(spy).to.have.been.calledOnce;
+            expect(spy).to.have.been.calledWithMatch(function (data) {
+                return data.foo === 'bar';
+            });
+        });
+
+        it('should trigger element:containercreated', function () {
+            var spy = sinon.spy();
+            bootStrap.plugin(function (api) {
+                api.on('element:containercreated', spy);
+            });
+            setNameData({foo: 'bar'});
+            bootStrap();
+            expect(spy).to.have.been.calledOnce;
+            expect(spy).to.have.been.calledWithMatch(function (el) {
+                return el.id === 'gardr';
+            });
+        });
+
+        it('should trigger data:onload', function () {
+            var spy = sinon.spy();
+            bootStrap.plugin(function (api) {
+                api.on('data:onload', spy);
+            });
+            bootStrap();
+            triggerOnLoad();
+            expect(spy).to.have.been.calledOnce;
+            expect(spy).to.have.been.calledWithMatch(function (data) {
+                return data.width === 0 && data.height === 0;
+            });
         });
     });
 });
