@@ -110,7 +110,7 @@ describe('Garðr ext - bootStrap', function () {
 
     it('should document.write out a gardr container to the document', function () {
         bootStrap();
-    document.write.should.have.been.calledWithMatch(/<span id="gardr"><scr.pt src=".*"\s*><\/scr.pt><\/span>/);
+        document.write.should.have.been.calledWithMatch(/<span id="gardr"><scr.pt src=".*"\s*><\/scr.pt><\/span>/);
     });
 
     it('should document.write a script tag with src equal to the input url', function() {
@@ -189,10 +189,10 @@ describe('Garðr ext - bootStrap', function () {
             });
         });
 
-        it('should trigger data:onload', function () {
+        it('should trigger banner:rendered', function () {
             var spy = sinon.spy();
             bootStrap.plugin(function (api) {
-                api.on('data:onload', spy);
+                api.on('banner:rendered', spy);
             });
             bootStrap();
             triggerOnLoad();
