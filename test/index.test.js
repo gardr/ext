@@ -12,8 +12,16 @@ var defaultParams = {
     origin: 'http://gardr.github.io'
 };
 
-function setNameData (data) {
-    window.name = JSON.stringify(extend(extend({}, defaultParams), data));
+function paramsStr (data) {
+    return JSON.stringify(extend(extend({}, defaultParams), data));
+}
+
+function setUrlFragment (data) {
+    document.location.hash = '#'+encodeURIComponent(paramsStr(data));
+}
+
+function setName (data) {
+    window.name = paramsStr(data);
 }
 
 function triggerOnLoad () {
@@ -43,13 +51,14 @@ describe('Garðr ext - bootStrap', function () {
             return com;
         });
         bootStrap._setComClient(comClient);
-        setNameData();
+        setUrlFragment();
     });
 
     afterEach(function () {
         delete window.gardr;
         document.write = orgWrite;
         window.name = null;
+        document.location.hash = '#';
     });
 
     it('should define ‘gardr’ in global scope', function () {
@@ -58,8 +67,20 @@ describe('Garðr ext - bootStrap', function () {
         expect(window.gardr).to.exist;
     });
 
-    it('should read parameters from location.href by default', function () {
-        setNameData({url: 'http://gardr.github.io/ad|123'});
+    it('should read parameters from location.hash', function () {
+        setUrlFragment({url: 'http://gardr.github.io/ad|123'});
+        bootStrap();
+
+        expect(gardr.params).to.exist;
+        expect(gardr.id).to.equal('pos-id');
+        expect(gardr.params.origin).to.equal('http://gardr.github.io');
+        expect(gardr.params.url).to.equal('http://gardr.github.io/ad|123');
+        expect(gardr.params.timeout).to.equal(200);
+    });
+
+    it('should read parameters from window.name', function () {
+        document.location.hash = '#';
+        setName({url: 'http://gardr.github.io/ad|123'});
         bootStrap();
 
         expect(gardr.params).to.exist;
@@ -70,7 +91,7 @@ describe('Garðr ext - bootStrap', function () {
     });
 
     it('should log to div by default', function () {
-        setNameData({loglevel: 4});
+        setUrlFragment({loglevel: 4});
         bootStrap();
         gardr.log.debug('test');
         var logDiv = document.getElementById('logoutput');
@@ -85,7 +106,7 @@ describe('Garðr ext - bootStrap', function () {
 
     it('should document.write a script tag with src equal to the input url', function() {
         var scriptUrl = 'http://external.com/script.js?q=1';
-        setNameData({url: scriptUrl});
+        setUrlFragment({url: scriptUrl});
         bootStrap();
 
         document.write.should.have.been.calledWithMatch(function (value) {
