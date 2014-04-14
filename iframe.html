@@ -9,7 +9,9 @@
 </head>
 <body>
     <script>
-        var gardr = { params: JSON.parse(window.name) };
+    (function (win) {
+        var urlFragment = decodeURIComponent(document.location.hash.substring(1));
+        var gardr = win.gardr = { params: JSON.parse(urlFragment || window.name) };
         var es5shim = ['<scr','ipt src=\'',
                 (gardr.params.es5shimUrl ||'//cdnjs.cloudflare.com/ajax/libs/es5-shim/2.1.0/es5-shim.min.js'),
                 '\'></scr','ipt>'].join('');
@@ -17,6 +19,7 @@
             document.write(es5shim);
         }
         document.write(['<scr', 'ipt src=\'', gardr.params.extScriptUrl, '\'></scr', 'ipt>'].join(''));
+    })(this);
     </script>
 </body>
 </html>
