@@ -114,6 +114,24 @@ describe('Garðr ext - bootStrap', function () {
         });
     });
 
+    it('should replace GARDR_UNIQUE_ID in the url with timestamp + id', function() {
+        var scriptUrl = 'http://external.com/script.js?q=1&m=GARDR_UNIQUE_ID&m2=GARDR_UNIQUE_ID';
+        setUrlFragment({url: scriptUrl});
+        var now = new Date().getTime();
+        var clock = sinon.useFakeTimers(now);
+        bootStrap();
+        clock.restore();
+
+        document.write.should.have.been.calledWithMatch(function (value) {
+            if (value.indexOf('<scri') !== 0) { return false; }
+            var tmp = document.createElement('div');
+            tmp.innerHTML=value;
+            var src = tmp.firstElementChild.src;
+            var unique = src.substring(src.lastIndexOf('=')+1);
+            return value.indexOf('GARDR_UNIQUE_ID') == -1 && unique == '' + now + gardr.id;
+        });
+    });
+
     it('should trigger comClient.rendered when all resources are loaded', function () {
         bootStrap();
 
