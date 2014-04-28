@@ -168,7 +168,7 @@ describe('Garðr ext - bootStrap', function () {
             bootStrap.plugin(function (api) {
                 api.on('params:parsed', spy);
             });
-            setNameData({foo: 'bar'});
+            setUrlFragment({foo: 'bar'});
             bootStrap();
             expect(spy).to.have.been.calledOnce;
             expect(spy).to.have.been.calledWithMatch(function (data) {
@@ -181,7 +181,7 @@ describe('Garðr ext - bootStrap', function () {
             bootStrap.plugin(function (api) {
                 api.on('element:containercreated', spy);
             });
-            setNameData({foo: 'bar'});
+            setUrlFragment({foo: 'bar'});
             bootStrap();
             expect(spy).to.have.been.calledOnce;
             expect(spy).to.have.been.calledWithMatch(function (el) {
