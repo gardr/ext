@@ -8,9 +8,13 @@ var defaultParams = {
     name: 'posname',
     minSize: 100,
     timeout: 200,
-    url: 'data:text/javascript;plain,void(0);',
+    url: 'http://gardr.github.io/foobar.js',
     height: 225,
-    origin: 'http://gardr.github.io'
+    origin: 'http://github.com'
+};
+
+var extOpts = {
+    allowedDomains: ['gardr.github.io', 'foobar.com']
 };
 
 function paramsStr (data) {
@@ -71,19 +75,50 @@ describe('Garðr ext - bootStrap', function () {
         document.location.hash = '#';
     });
 
+    it('should throw an error if url is not on a valid domain', function () {
+        expect(bootStrap.bind(null, {allowedDomains: ['example.com']})).to.throw();
+    });
+
+    it('should throw an error if url is a data-uri', function () {
+        setUrlFragment({
+            url: 'data:text/javascript;plain,void(0);'
+        });
+        expect(bootStrap).to.throw('protocol');
+    });
+
+    it('should not throw an error if a relative url', function () {
+        setUrlFragment({
+            url: '/foo/bar.js'
+        });
+        expect(bootStrap).not.to.throw();
+    });
+
+    it('should throw if one of the validDomains contains something else than just the hostname', function () {
+        ['http://foobar.com', '//foobar.com', 'https://foobar.com', 'foobar.com/'].forEach(function (domain) {
+            expect(bootStrap.bind(null, {allowedDomains: [domain]})).to.throw('Invalid domain');
+        });
+    });
+
+    it('should not throw an error if url is on a valid domain', function () {
+        setUrlFragment({
+            url: 'http://foobar.com/foo/bar'
+        });
+        expect(bootStrap.bind(null, extOpts)).not.to.throw();
+    });
+
     it('should define ‘gardr’ in global scope', function () {
-        bootStrap();
+        bootStrap(extOpts);
 
         expect(window.gardr).to.exist;
     });
 
     it('should read parameters from location.hash', function () {
         setUrlFragment({url: 'http://gardr.github.io/ad|123'});
-        bootStrap();
+        bootStrap(extOpts);
 
         expect(gardr.params).to.exist;
         expect(gardr.id).to.equal('pos-id');
-        expect(gardr.params.origin).to.equal('http://gardr.github.io');
+        expect(gardr.params.origin).to.equal('http://github.com');
         expect(gardr.params.url).to.equal('http://gardr.github.io/ad|123');
         expect(gardr.params.timeout).to.equal(200);
     });
@@ -91,32 +126,32 @@ describe('Garðr ext - bootStrap', function () {
     it('should read parameters from window.name', function () {
         document.location.hash = '#';
         setName({url: 'http://gardr.github.io/ad|123'});
-        bootStrap();
+        bootStrap(extOpts);
 
         expect(gardr.params).to.exist;
         expect(gardr.id).to.equal('pos-id');
-        expect(gardr.params.origin).to.equal('http://gardr.github.io');
+        expect(gardr.params.origin).to.equal('http://github.com');
         expect(gardr.params.url).to.equal('http://gardr.github.io/ad|123');
         expect(gardr.params.timeout).to.equal(200);
     });
 
     it('should log to div by default', function () {
         setUrlFragment({loglevel: 4});
-        bootStrap();
+        bootStrap(extOpts);
         gardr.log.debug('test');
         var logDiv = document.getElementById('logoutput');
         expect(logDiv).to.exist;
     });
 
     it('should document.write out a gardr container to the document', function () {
-        bootStrap();
+        bootStrap(extOpts);
         document.write.should.have.been.calledWithMatch(/<span id="gardr"><scr.pt src=".*"\s*><\/scr.pt><\/span>/);
     });
 
     it('should document.write a script tag with src equal to the input url', function() {
-        var scriptUrl = 'http://external.com/script.js?q=1';
+        var scriptUrl = 'http://gardr.github.io/script.js?q=1';
         setUrlFragment({url: scriptUrl});
-        bootStrap();
+        bootStrap(extOpts);
 
         document.write.should.have.been.calledWithMatch(function (value) {
             return value.indexOf('<script') >= 0 && value.indexOf(scriptUrl) >= 0;
@@ -124,10 +159,10 @@ describe('Garðr ext - bootStrap', function () {
     });
 
     it('should trigger comClient.rendered when all resources are loaded', function () {
-        bootStrap();
+        bootStrap(extOpts);
 
         expect(comClient).to.have.been.calledOnce;
-        expect(comClient).to.have.been.calledWith(gardr.id, window.parent, 'http://gardr.github.io');
+        expect(comClient).to.have.been.calledWith(gardr.id, window.parent, 'http://github.com');
 
         triggerOnLoad();
 
@@ -135,7 +170,7 @@ describe('Garðr ext - bootStrap', function () {
     });
 
     it('should detect the size of the rendered banner', function () {
-        bootStrap();
+        bootStrap(extOpts);
         var el = document.getElementById('gardr');
         var span = document.createElement('span');
         span.innerHTML = '<span style="width:20px;height:10px;margin:0;padding:0;display:inline-block;">x</span>';
@@ -156,7 +191,7 @@ describe('Garðr ext - bootStrap', function () {
         it('should initialize plugins', function () {
             var spy = sinon.spy();
             bootStrap.plugin(spy);
-            bootStrap();
+            bootStrap(extOpts);
             expect(spy).to.have.been.calledOnce;
             expect(spy).to.have.been.calledWithMatch(function (api) {
                 return api instanceof pluginCore.PluginApi;
@@ -169,7 +204,7 @@ describe('Garðr ext - bootStrap', function () {
                 api.on('params:parsed', spy);
             });
             setUrlFragment({foo: 'bar'});
-            bootStrap();
+            bootStrap(extOpts);
             expect(spy).to.have.been.calledOnce;
             expect(spy).to.have.been.calledWithMatch(function (data) {
                 return data.foo === 'bar';
@@ -182,7 +217,7 @@ describe('Garðr ext - bootStrap', function () {
                 api.on('element:containercreated', spy);
             });
             setUrlFragment({foo: 'bar'});
-            bootStrap();
+            bootStrap(extOpts);
             expect(spy).to.have.been.calledOnce;
             expect(spy).to.have.been.calledWithMatch(function (el) {
                 return el.id === 'gardr';
@@ -194,7 +229,7 @@ describe('Garðr ext - bootStrap', function () {
             bootStrap.plugin(function (api) {
                 api.on('banner:rendered', spy);
             });
-            bootStrap();
+            bootStrap(extOpts);
             triggerOnLoad();
             expect(spy).to.have.been.calledOnce;
             expect(spy).to.have.been.calledWithMatch(function (data) {
