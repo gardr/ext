@@ -1,6 +1,7 @@
 # Garðr (ext)
 
 [![Build Status](https://api.travis-ci.org/gardr/ext.png?branch=master)](https://travis-ci.org/gardr/ext)
+
 [![NPM](https://nodei.co/npm/gardr-ext.png?stars=true&downloads=true)](https://npmjs.org/package/gardr-ext)
 
 This project is part of the [Garðr](http://gardr.github.io/) family of projets.
