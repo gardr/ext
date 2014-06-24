@@ -4,9 +4,9 @@
   "description": "The js part of Gardr which embeds external content inside the iframe",
   "main": "./lib/index.js",
   "scripts": {
-    "lint": "./node_modules/.bin/jshint --reporter node_modules/jshint-stylish/stylish.js lib test --exclude test/lib",
-    "test": "npm run lint && ./node_modules/karma/bin/karma start --single-run",
-    "dist": "mkdir -p dist && ./node_modules/.bin/browserify lib/index.js -d -s gardr.ext -o dist/gardr.ext.js && ./node_modules/.bin/uglifyjs dist/gardr.ext.js -mc -o dist/gardr.ext.min.js"
+    "lint": "node make lint",
+    "test": "node make test",
+    "watch": "node make watch"
   },
   "keywords": [
     "gardr",
@@ -25,25 +25,23 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "chai": "1.9.1",
-    "karma-chai": "0.1.0",
-    "mocha": "1.20.1",
-    "karma-mocha": "0.1.4",
-    "karma-script-launcher": "0.1.0",
-    "karma-chrome-launcher": "0.1.4",
-    "karma-firefox-launcher": "0.1.3",
-    "karma-html2js-preprocessor": "0.1.0",
-    "karma-coffee-preprocessor": "0.2.1",
-    "requirejs": "2.1.14",
-    "karma-requirejs": "0.2.2",
-    "karma-phantomjs-launcher": "0.1.4",
-    "karma": "0.12.16",
     "browserify": "3.46.1",
-    "karma-browserifast": "^0.6.1",
-    "karma-sinon-chai": "0.2.0",
+    "chai": "1.9.1",
     "jshint": "2.5.1",
     "jshint-stylish": "0.2.0",
-    "uglify-js": "2.4.14"
+    "karma": "0.12.16",
+    "karma-browserifast": "0.6.1",
+    "karma-chai": "0.1.0",
+    "karma-chrome-launcher": "0.1.4",
+    "karma-coffee-preprocessor": "0.2.1",
+    "karma-firefox-launcher": "0.1.3",
+    "karma-html2js-preprocessor": "0.1.0",
+    "karma-mocha": "0.1.4",
+    "karma-phantomjs-launcher": "0.1.4",
+    "karma-script-launcher": "0.1.0",
+    "karma-sinon-chai": "0.2.0",
+    "mocha": "1.20.1",
+    "shelljs": "0.3.0"
   },
   "dependencies": {
     "util-extend": "^1.0.1",
