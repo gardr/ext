@@ -14,9 +14,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test/lib/Function-polyfill.js',
-      'lib/**/*.js',
-      'test/**/*.js'
+      'test/lib/Function-polyfill.js'
     ],
 
 
@@ -31,13 +29,16 @@ module.exports = function(config) {
     reporters: ['progress'],
 
     preprocessors: {
-      'lib/**/*.js': ['browserify'],
-      'test/**/*.js': ['browserify']
+      '/**/*.browserify': 'browserify'
     },
 
     browserify: {
         watch: true,
-        debug: true
+        debug: true,
+        files: [
+            'lib/**/*.js',
+            'test/**/*.js'
+        ]
     },
 
     // web server port

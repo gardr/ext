@@ -6,8 +6,7 @@
   "scripts": {
     "lint": "./node_modules/.bin/jshint --reporter node_modules/jshint-stylish/stylish.js lib test --exclude test/lib",
     "test": "npm run lint && ./node_modules/karma/bin/karma start --single-run",
-    "dist": "mkdir -p dist && ./node_modules/.bin/browserify lib/index.js -d -s gardr.ext -o dist/gardr.ext.js && ./node_modules/.bin/uglifyjs dist/gardr.ext.js -mc -o dist/gardr.ext.min.js",
-    "prepublish": "npm run test && npm run dist"
+    "dist": "mkdir -p dist && ./node_modules/.bin/browserify lib/index.js -d -s gardr.ext -o dist/gardr.ext.js && ./node_modules/.bin/uglifyjs dist/gardr.ext.js -mc -o dist/gardr.ext.min.js"
   },
   "keywords": [
     "gardr",
@@ -26,32 +25,32 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "chai": "~1.9.0",
-    "karma-chai": "~0.1.0",
-    "mocha": "~1.17.1",
-    "karma-mocha": "~0.1.1",
-    "karma-script-launcher": "~0.1.0",
-    "karma-chrome-launcher": "~0.1.2",
-    "karma-firefox-launcher": "~0.1.3",
-    "karma-html2js-preprocessor": "~0.1.0",
-    "karma-coffee-preprocessor": "~0.1.3",
-    "requirejs": "~2.1.11",
-    "karma-requirejs": "~0.2.1",
-    "karma-phantomjs-launcher": "~0.1.2",
-    "karma": "~0.10.9",
-    "browserify": "~3.30.1",
-    "karma-browserify": "~0.1.0",
-    "karma-sinon-chai": "~0.1.4",
-    "jshint": "~2.4.3",
-    "jshint-stylish": "~0.1.5",
-    "uglify-js": "~2.4.12"
+    "chai": "1.9.1",
+    "karma-chai": "0.1.0",
+    "mocha": "1.20.1",
+    "karma-mocha": "0.1.4",
+    "karma-script-launcher": "0.1.0",
+    "karma-chrome-launcher": "0.1.4",
+    "karma-firefox-launcher": "0.1.3",
+    "karma-html2js-preprocessor": "0.1.0",
+    "karma-coffee-preprocessor": "0.2.1",
+    "requirejs": "2.1.14",
+    "karma-requirejs": "0.2.2",
+    "karma-phantomjs-launcher": "0.1.4",
+    "karma": "0.12.16",
+    "browserify": "3.46.1",
+    "karma-browserifast": "^0.6.1",
+    "karma-sinon-chai": "0.2.0",
+    "jshint": "2.5.1",
+    "jshint-stylish": "0.2.0",
+    "uglify-js": "2.4.14"
   },
   "dependencies": {
-    "util-extend": "~1.0.1",
-    "eventlistener": "0.0.1",
-    "cross-domain-events": "0.0.2",
-    "computed-style": "~0.1.3",
-    "gardr-core-plugin": "0.0.1",
-    "define-options": "0.1.3"
+    "util-extend": "^1.0.1",
+    "eventlistener": "^0.0.1",
+    "cross-domain-events": "^0.0.2",
+    "computed-style": "^0.1.3",
+    "gardr-core-plugin": "^0.1.0",
+    "define-options": "^0.1.3"
   }
 }
