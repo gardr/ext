@@ -49,6 +49,22 @@ describe('childrenSize', function () {
         expect(res.height).to.equal(10, 'height');
     });
 
+    it('should return total with and height for nested children', function () {
+        var parent = createDiv('100%');
+        var a = createElement('a', '10px', '10px');
+        var img = createElement('img', '30px', '50px');
+
+        img.style.verticalAlign = 'bottom';
+        a.appendChild(img);
+        parent.appendChild(a);
+        document.body.appendChild(parent);
+
+        var res = childrenSize(parent);
+        expect(res).to.exist;
+        expect(res.width).to.equal(30, 'width');
+        expect(res.height).to.equal(50, 'height');
+    });
+
     it('should ignore children with position absolute/fixed', function () {
         insertCss('#absolute-position { position: absolute; display: inline-block; }');
         insertCss('#fixed-position { position: fixed; display: inline-block; }');
