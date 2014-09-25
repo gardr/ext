@@ -1,6 +1,6 @@
 {
   "name": "gardr-ext",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "The js part of Gardr which embeds external content inside the iframe",
   "main": "./lib/index.js",
   "scripts": {
