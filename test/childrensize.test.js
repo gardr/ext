@@ -39,13 +39,16 @@ describe('childrenSize', function () {
 
     it('should return total with and height for multiple same-level children', function () {
         var parent = createDiv('100%');
-        parent.appendChild(createElement('span', '10px', '10px')).style.display = 'inline-block';
+        var elm = parent.appendChild(createElement('span', '10px', '10px'));
+        elm.style.display = 'inline-block';
+        elm.innerHTML = '&nbsp;';
         parent.appendChild(createElement('span', '15px', '5px')).style.display = 'inline-block';
         parent.appendChild(createElement('div', '30px', '10px'));
         parent.appendChild(createElement('strong', '5px', '15px')).style.display = 'inline-block';
         document.body.appendChild(parent);
 
         parent.style.lineHeight = '0px';
+        parent.style.fontSize = '0px';
 
         var res = childrenSize(parent);
         expect(res).to.exist;
