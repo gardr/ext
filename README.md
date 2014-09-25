@@ -1,6 +1,9 @@
 # Garðr (ext)
 
 [![Build Status](https://api.travis-ci.org/gardr/ext.png?branch=master)](https://travis-ci.org/gardr/ext)
+[![Dependency Status](https://david-dm.org/gardr/ext.png)](https://david-dm.org/gardr/ext)
+[![devDependency Status](https://david-dm.org/gardr/ext/dev-status.png)](https://david-dm.org/gardr/ext#info=devDependencies)
+
 
 [![NPM](https://nodei.co/npm/gardr-ext.png?stars=true&downloads=true)](https://npmjs.org/package/gardr-ext)
 
