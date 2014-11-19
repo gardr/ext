@@ -145,7 +145,18 @@ describe('Garðr ext - gardrExt', function () {
 
     it('should document.write out a gardr container to the document', function () {
         gardrExt(extOpts);
-        document.write.should.have.been.calledWithMatch(/<span id="gardr"><scr.pt src=".*"\s*><\/scr.pt><\/span>/);
+        document.write.should.have.been.calledWithMatch(/<div id="gardr"><scr.pt src=".*"\s*><\/scr.pt><\/div>/);
+    });
+
+    it('should assign the gardr container to gardr.container', function () {
+        gardrExt(extOpts);
+        expect(gardr.container).to.exist;
+        expect(gardr.container.id).to.equal('gardr');
+    }),
+
+    it('should set overflow:hidden on the gardr container', function () {
+        gardrExt(extOpts);
+        expect(gardr.container.style.overflow).to.equal('hidden');
     });
 
     it('should document.write a script tag with src equal to the input url', function() {
