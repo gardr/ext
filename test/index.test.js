@@ -124,7 +124,7 @@ describe('Garðr ext - gardrExt', function () {
     });
 
     it('should read parameters from window.name', function () {
-        document.location.hash = '#';
+        document.location.hash = '';
         setName({url: 'http://gardr.github.io/ad|123'});
         gardrExt(extOpts);
 
