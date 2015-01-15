@@ -36,7 +36,7 @@ function triggerOnLoad () {
         evt = new UIEvent('load');
     } catch (e) {
         evt = document.createEvent('UIEvent');
-        evt.initUIEvent('load', false, true, null);
+        evt.initUIEvent('load', false, true, null, null);
     }
     window.dispatchEvent(evt);
     clock.tick(10);
