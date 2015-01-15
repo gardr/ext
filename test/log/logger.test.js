@@ -10,6 +10,8 @@ function undefine(obj, prop) {
     };
 }
 
+var ifBrowserHasDispatchEventIt = (typeof window.dispatchEvent == 'function' ? it : it.skip);
+
 describe('logger', function () {
 	it('should default logLevel to 0 if not undefined', function () {
         var log = logger.create('no_loglevel_test', undefined, function () {});
@@ -45,7 +47,7 @@ describe('logger', function () {
         expect(logData[0].time).not.to.be.lessThan(startTime);
     });
 
-    it('should catch errors', function () {
+    ifBrowserHasDispatchEventIt('should catch errors', function () {
         var logData = [];
         logger.create('error_test', '1', function (obj) {
             logData.push(obj);
@@ -58,8 +60,9 @@ describe('logger', function () {
         var restoreOnError = undefine(window, 'onerror');
         var evt = new ErrorEvent('error', errorData);
         window.dispatchEvent(evt);
+
         restoreOnError();
-        
+
         expect(logData.length).to.equal(1);
         var logObj = logData[0];
         expect(logObj.msg).to.equal(errorData.message);
