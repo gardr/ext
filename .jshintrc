@@ -1,13 +1,14 @@
 {
     "globals": {
-        "sinon"     : false,
-        "describe"  : false,
-        "it"        : false,
-        "xit"       : false,
-        "expect"    : false,
-        "beforeEach": false,
-        "afterEach" : false,
-        "UIEvent"   : false
+        "sinon"             : false,
+        "describe"          : false,
+        "it"                : false,
+        "xit"               : false,
+        "expect"            : false,
+        "beforeEach"        : false,
+        "afterEach"         : false,
+        "UIEvent"           : false,
+        "HTMLCollection"    : false
     },
 
     "bitwise"       : true,

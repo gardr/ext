@@ -12,7 +12,17 @@ function createElement (tag, width, height) {
 }
 var createDiv = createElement.bind(null, 'div');
 
+function instanceOfHTMLCollection (obj) {
+    return obj instanceof HTMLCollection;
+}
+
 describe('childrenSize', function () {
+    it('should not use Array slice', function () {
+        var sliceSpy = sinon.spy(Array.prototype, 'slice');
+        childrenSize( document.body.appendChild( createDiv('100%', '10px') ) );
+        expect(sliceSpy).not.to.have.been.calledOn( sinon.match(instanceOfHTMLCollection) );
+    });
+
     it('should return undefined when calling without a dom element', function () {
         var res = childrenSize();
         expect(res).to.be.undefined;
