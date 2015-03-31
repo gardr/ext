@@ -10,6 +10,7 @@ function createElement (tag, width, height) {
     element.style.margin = 0;
     return element;
 }
+
 var createDiv = createElement.bind(null, 'div');
 
 function instanceOfHTMLCollection (obj) {
@@ -46,6 +47,25 @@ describe('childrenSize', function () {
         expect(res.width).to.equal(10);
         expect(res.height).to.equal(10);
     });
+
+    it('should ignore all but element nodes when calculating width and height', function () {
+        var parent = createDiv('100%');
+        parent.appendChild(createDiv('10px', '10px'));
+        var element = (createElement('span', '15px', '5px'));
+        element.style.display = 'inline-block';
+        element.innerHTML = 'count me, and I will make you fail';
+        parent.appendChild(element);
+        document.body.appendChild(parent);
+
+        parent.style.lineHeight = '0px';
+        parent.style.fontSize = '0px';
+
+        var res = childrenSize(parent);
+        expect(res).to.exist;
+        expect(res.width).to.equal(15);
+        expect(res.height).to.equal(15);
+    });
+
 
     it('should return total with and height for multiple same-level children', function () {
         var parent = createDiv('100%');
