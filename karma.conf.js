@@ -5,7 +5,6 @@ module.exports = function(config) {
 
         files: [
             'node_modules/ie8/build/ie8.max.js',
-            'test/lib/Function-polyfill.js'
             'test/**/*.js'
         ],
 
