@@ -45,7 +45,7 @@
   "dependencies": {
     "util-extend": "^1.0.1",
     "eventlistener": "^0.0.1",
-    "cross-domain-events": "^0.0.2",
+    "cross-domain-events": "^0.0.4",
     "computed-style": "^0.3.0",
     "gardr-core-plugin": "^0.1.0",
     "define-options": "^0.1.3"
