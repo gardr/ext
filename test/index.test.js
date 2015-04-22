@@ -3,6 +3,8 @@
 var gardrExt = require('../lib/index.js');
 var extend = require('util-extend');
 var pluginCore = require('gardr-core-plugin');
+var expect = require('expect.js');
+
 var defaultParams = {
     id: 'pos-id',
     name: 'posname',
@@ -76,26 +78,26 @@ describe('Garðr ext - gardrExt', function () {
     });
 
     it('should throw an error if url is not on a valid domain', function () {
-        expect(gardrExt.bind(null, {allowedDomains: ['example.com']})).to.throw();
+        expect(gardrExt.bind(null, {allowedDomains: ['example.com']})).to.throwError();
     });
 
     it('should throw an error if url is a data-uri', function () {
         setUrlFragment({
             url: 'data:text/javascript;plain,void(0);'
         });
-        expect(gardrExt).to.throw('protocol');
+        expect(gardrExt).to.throwError('protocol');
     });
 
     it('should not throw an error if a relative url', function () {
         setUrlFragment({
             url: '/foo/bar.js'
         });
-        expect(gardrExt).not.to.throw();
+        expect(gardrExt).not.to.throwError();
     });
 
     it('should throw if one of the validDomains contains something else than just the hostname', function () {
         ['http://foobar.com', '//foobar.com', 'https://foobar.com', 'foobar.com/'].forEach(function (domain) {
-            expect(gardrExt.bind(null, {allowedDomains: [domain]})).to.throw('Invalid domain');
+            expect(gardrExt.bind(null, {allowedDomains: [domain]})).to.throwError('Invalid domain');
         });
     });
 
@@ -103,20 +105,20 @@ describe('Garðr ext - gardrExt', function () {
         setUrlFragment({
             url: 'http://foobar.com/foo/bar'
         });
-        expect(gardrExt.bind(null, extOpts)).not.to.throw();
+        expect(gardrExt.bind(null, extOpts)).not.to.throwError();
     });
 
     it('should define ‘gardr’ in global scope', function () {
         gardrExt(extOpts);
 
-        expect(window.gardr).to.exist;
+        expect(window.gardr).to.be.ok();
     });
 
     it('should read parameters from location.hash', function () {
         setUrlFragment({url: 'http://gardr.github.io/ad|123'});
         gardrExt(extOpts);
 
-        expect(gardr.params).to.exist;
+        expect(gardr.params).to.be.ok();
         expect(gardr.id).to.equal('pos-id');
         expect(gardr.params.origin).to.equal('http://github.com');
         expect(gardr.params.url).to.equal('http://gardr.github.io/ad|123');
@@ -128,7 +130,7 @@ describe('Garðr ext - gardrExt', function () {
         setName({url: 'http://gardr.github.io/ad|123'});
         gardrExt(extOpts);
 
-        expect(gardr.params).to.exist;
+        expect(gardr.params).to.be.ok();
         expect(gardr.id).to.equal('pos-id');
         expect(gardr.params.origin).to.equal('http://github.com');
         expect(gardr.params.url).to.equal('http://gardr.github.io/ad|123');
@@ -140,17 +142,18 @@ describe('Garðr ext - gardrExt', function () {
         gardrExt(extOpts);
         gardr.log.debug('test');
         var logDiv = document.getElementById('logoutput');
-        expect(logDiv).to.exist;
+        expect(logDiv).to.be.ok();
     });
 
     it('should document.write out a gardr container to the document', function () {
         gardrExt(extOpts);
-        document.write.should.have.been.calledWithMatch(/<div id="gardr"><scr.pt src=".*"\s*><\/scr.pt><\/div>/);
+        var assertion = document.write.calledWithMatch(/<div id="gardr"><scr.pt src=".*"\s*><\/scr.pt><\/div>/);
+        expect(assertion).to.be.ok();
     });
 
     it('should assign the gardr container to gardr.container', function () {
         gardrExt(extOpts);
-        expect(gardr.container).to.exist;
+        expect(gardr.container).to.be.ok();
         expect(gardr.container.id).to.equal('gardr');
     }),
 
@@ -164,20 +167,21 @@ describe('Garðr ext - gardrExt', function () {
         setUrlFragment({url: scriptUrl});
         gardrExt(extOpts);
 
-        document.write.should.have.been.calledWithMatch(function (value) {
+        var assertion = document.write.calledWithMatch(function (value) {
             return value.indexOf('<script') >= 0 && value.indexOf(scriptUrl) >= 0;
         });
+        expect(assertion).to.be.ok();
     });
 
     it('should trigger comClient.rendered when all resources are loaded', function () {
         gardrExt(extOpts);
 
-        expect(comClient).to.have.been.calledOnce;
-        expect(comClient).to.have.been.calledWith(gardr.id, window.parent, 'http://github.com');
+        expect(comClient.calledOnce).to.be.ok();
+        expect(comClient.calledWith(gardr.id, window.parent, 'http://github.com')).to.be.ok();
 
         triggerOnLoad();
 
-        expect(com.rendered).to.have.been.calledOnce;
+        expect(com.rendered.calledOnce).to.be.ok();
     });
 
     it('should detect the size of the rendered banner', function () {
@@ -187,24 +191,27 @@ describe('Garðr ext - gardrExt', function () {
         span.innerHTML = '<span style="width:20px;height:10px;margin:0;padding:0;display:inline-block;">x</span>';
         el.appendChild(span);
         triggerOnLoad();
-        expect(com.rendered).to.have.been.calledWithMatch(function (obj) {
+
+        var assertion = com.rendered.calledWithMatch(function (obj) {
             return typeof obj.width === 'number' && typeof obj.height === 'number';
         });
+
+        expect(assertion).to.be.ok();
     });
 
     describe('plugins', function () {
         it('should allow to register plugins', function () {
             expect(function () {
                 gardrExt.plugin(function () {});
-            }).not.to.throw();
+            }).not.to.throwError();
         });
 
         it('should initialize plugins', function () {
             var spy = sinon.spy();
             gardrExt.plugin(spy);
             gardrExt(extOpts);
-            expect(spy).to.have.been.calledOnce;
-            expect(spy.lastCall.args[0]).to.be.an.instanceof(pluginCore.PluginApi);
+            expect(spy.calledOnce).to.be.ok();
+            expect(spy.lastCall.args[0]).to.be.an(pluginCore.PluginApi);
             expect(spy.lastCall.args[1]).to.have.keys( Object.keys(extOpts) );
         });
 
@@ -215,10 +222,11 @@ describe('Garðr ext - gardrExt', function () {
             });
             setUrlFragment({foo: 'bar'});
             gardrExt(extOpts);
-            expect(spy).to.have.been.calledOnce;
-            expect(spy).to.have.been.calledWithMatch(function (data) {
+
+            expect(spy.calledOnce).to.be.ok();
+            expect(spy.calledWithMatch(function (data) {
                 return data.foo === 'bar';
-            });
+            })).to.be.ok();
         });
 
         it('should trigger element:containercreated', function () {
@@ -228,10 +236,10 @@ describe('Garðr ext - gardrExt', function () {
             });
             setUrlFragment({foo: 'bar'});
             gardrExt(extOpts);
-            expect(spy).to.have.been.calledOnce;
-            expect(spy).to.have.been.calledWithMatch(function (el) {
+            expect(spy.calledOnce).to.be.ok();
+            expect(spy.calledWithMatch(function (el) {
                 return el.id === 'gardr';
-            });
+            })).to.be.ok();
         });
 
         it('should trigger banner:rendered', function () {
@@ -241,10 +249,10 @@ describe('Garðr ext - gardrExt', function () {
             });
             gardrExt(extOpts);
             triggerOnLoad();
-            expect(spy).to.have.been.calledOnce;
-            expect(spy).to.have.been.calledWithMatch(function (data) {
+            expect(spy.calledOnce).to.be.ok();
+            expect(spy.calledWithMatch(function (data) {
                 return data.width === 0 && data.height === 0;
-            });
+            })).to.be.ok();
         });
     });
 });

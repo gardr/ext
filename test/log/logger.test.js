@@ -1,6 +1,7 @@
 /*jshint expr: true*/
 var logger = require('../../lib/log/logger.js');
 var ErrorEvent = window.ErrorEvent || require('../lib/ErrorEvent.js');
+var expect = require('expect.js');
 
 function undefine(obj, prop) {
     var org = obj[prop];
@@ -68,7 +69,7 @@ describe('logger', function () {
         expect(logObj.msg).to.equal(errorData.message);
         expect(logObj.level).to.equal(1);
         expect(logObj.name).to.equal('error_test');
-        expect(logObj.time).not.to.be.undefined;
+        expect(logObj.time).not.to.be(undefined);
         expect(logObj.url).to.equal(errorData.filename);
         expect(logObj.line).to.equal(errorData.lineno);
     });

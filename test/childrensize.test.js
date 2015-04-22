@@ -1,6 +1,7 @@
 /* jshint expr: true */
 var childrenSize = require('../lib/childrensize.js');
 var insertCss    = require('../lib/style/insertCss.js');
+var expect = require('expect.js');
 
 function createElement (tag, width, height) {
     var element = document.createElement(tag);
@@ -20,18 +21,21 @@ describe('childrenSize', function () {
     it('should not use Array slice', function () {
         var sliceSpy = sinon.spy(Array.prototype, 'slice');
         childrenSize( document.body.appendChild( createDiv('100%', '10px') ) );
-        expect(sliceSpy).not.to.have.been.calledOn( sinon.match(instanceOfHTMLCollection) );
+        // expect(sliceSpy.called).to.be.ok();
+        //expect(sliceSpy.getCall(0)).to.be.ok();
+        //
+        expect(sliceSpy.calledOn( sinon.match(instanceOfHTMLCollection) ));
     });
 
     it('should return undefined when calling without a dom element', function () {
         var res = childrenSize();
-        expect(res).to.be.undefined;
+        expect(res).to.be(undefined);
     });
 
     it('should return width and height 0 for an element without children', function () {
         var div = document.body.appendChild(createDiv('10px', '10px'));
         var res = childrenSize(div);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(0);
         expect(res.height).to.equal(0);
     });
@@ -42,7 +46,7 @@ describe('childrenSize', function () {
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(10);
         expect(res.height).to.equal(10);
     });
@@ -61,7 +65,7 @@ describe('childrenSize', function () {
         parent.style.fontSize = '0px';
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(30, 'width');
         expect(res.height).to.equal(40, 'height');
     });
@@ -81,7 +85,7 @@ describe('childrenSize', function () {
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(40, 'width');
         expect(res.height).to.equal(50, 'height');
     });
@@ -106,7 +110,7 @@ describe('childrenSize', function () {
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(300, 'width');
         expect(res.height).to.equal(400, 'height');
     });
@@ -125,7 +129,7 @@ describe('childrenSize', function () {
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(10, 'width');
         expect(res.height).to.equal(10, 'height');
     });
@@ -143,7 +147,7 @@ describe('childrenSize', function () {
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(10, 'width');
         expect(res.height).to.equal(10, 'height');
     });
@@ -161,7 +165,7 @@ describe('childrenSize', function () {
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(10, 'width');
         expect(res.height).to.equal(10, 'height');
     });
@@ -179,7 +183,7 @@ describe('childrenSize', function () {
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(10, 'width');
         expect(res.height).to.equal(10, 'height');
     });
@@ -197,7 +201,7 @@ describe('childrenSize', function () {
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(10, 'width');
         expect(res.height).to.equal(10, 'height');
     });
@@ -215,7 +219,7 @@ describe('childrenSize', function () {
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(10, 'width');
         expect(res.height).to.equal(10, 'height');
     });
@@ -246,7 +250,7 @@ describe('childrenSize', function () {
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(200, 'width');
         expect(res.height).to.equal(400, 'height');
     });
@@ -254,14 +258,16 @@ describe('childrenSize', function () {
     it('should ignore children with position absolute/fixed', function () {
         insertCss('#absolute-position { position: absolute; display: inline-block; }');
         insertCss('#fixed-position { position: fixed; display: inline-block; }');
+
         var parent = createDiv('100%');
         parent.appendChild(createDiv('10px', '10px')).id = 'absolute-position';
         parent.appendChild(createDiv('10px', '10px')).id = 'fixed-position';
         parent.appendChild(createElement('span', '10px', '10px')).style.display = 'inline-block';
+
         document.body.appendChild(parent);
 
         var res = childrenSize(parent);
-        expect(res).to.exist;
+        expect(res).to.be.ok();
         expect(res.width).to.equal(10, 'width');
         expect(res.height).to.equal(10, 'height');
     });
