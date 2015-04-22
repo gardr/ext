@@ -68,7 +68,12 @@ describe('Garðr ext - gardrExt', function () {
     });
 
     afterEach(function () {
-        delete window.gardr;
+        try {
+            delete window.gardr;
+        } catch(e){
+            window.gardr = null;
+        }
+
         document.write = orgWrite;
         window.name = null;
         injected.forEach(function (el) {
