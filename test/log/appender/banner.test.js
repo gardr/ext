@@ -9,15 +9,9 @@ describe('logToBanner', function() {
         level: 4,
         name: 'testName'
     };
-    var clock;
 
-    beforeEach(function() {
-        clock = sinon.useFakeTimers();
-    });
-
-    afterEach(function() {
+    afterEach(function(){
         logToBanner.reset();
-        clock.restore();
     });
 
     it('should render an overlay the first time it\'s called', function() {
@@ -26,15 +20,18 @@ describe('logToBanner', function() {
         expect(output).to.be.ok();
     });
 
-    it('should output a div for each log message', function() {
+    it('should output a div for each log message', function(done) {
         logToBanner(logObj);
-        var output = document.getElementById('logoutput');
-        clock.tick(51);
-        expect(output.children.length).to.equal(1);
-        expect(output.children[0].textContent).to.have.string(logObj.msg);
+
+        setTimeout(function(){
+            var output = document.getElementById('logoutput');
+            expect(output.children.length).to.equal(1);
+            expect(output.children[0].textContent).to.have.string(logObj.msg);
+            done();
+        }, 51);
     });
 
-    it('should include script url and line for script errors', function() {
+    it('should include script url and line for script errors', function(done) {
         var errObj = {
             msg: 'Uncaught SyntaxError: Test',
             time: new Date().getTime(),
@@ -44,9 +41,13 @@ describe('logToBanner', function() {
             stack: []
         };
         logToBanner(errObj);
-        var output = document.getElementById('logoutput');
-        clock.tick(51);
-        expect(output.children.length).to.equal(1);
-        expect(output.children[0].textContent).to.have.string(errObj.url + ':' + errObj.line);
+
+        setTimeout(function(){
+            var output = document.getElementById('logoutput');
+            expect(output.children.length).to.equal(1);
+            expect(output.children[0].textContent).to.have.string(errObj.url + ':' + errObj.line);
+            done();
+        }, 51);
+
     });
 });
