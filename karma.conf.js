@@ -6,21 +6,18 @@ module.exports = function(config) {
         files: [
             'node_modules/ie8/build/ie8.max.js',
             'test/lib/Function-polyfill.js'
+            'test/**/*.js'
         ],
 
         reporters: ['progress'],
 
         preprocessors: {
-            '/**/*.browserify': 'browserify'
+            'test/**/*.js': 'browserify'
         },
 
         browserify: {
             watch: true,
-            debug: true,
-            files: [
-                'lib/**/*.js',
-                'test/**/*.js'
-            ]
+            debug: true
         },
         port: 9876,
         colors: true,
