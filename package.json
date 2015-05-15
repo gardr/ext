@@ -41,6 +41,9 @@
     "karma-sauce-launcher": "^0.2.10",
     "karma-sinon": "^1.0.4",
     "mocha": "^2.2.4",
+    "normalize.css": "^3.0.3",
+    "proxyquire": "^1.4.0",
+    "proxyquireify": "^2.0.0",
     "shelljs": "0.3.0",
     "sinon": "1.12.2"
   },

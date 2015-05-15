@@ -1,29 +1,34 @@
 module.exports = function(config) {
     var settings = {
         basePath: '',
-        frameworks: ['mocha', 'es5-shim', 'browserify', 'sinon'],
+        frameworks: ['mocha', 'browserify', 'es5-shim', 'sinon'],
 
         files: [
-            'test/**/*.js'
+            'node_modules/normalize.css/normalize.css',
+            'test/**/*.test.js'
         ],
 
         reporters: ['progress'],
 
         preprocessors: {
-            'test/**/*.js': 'browserify'
+            'test/**/*.test.js': 'browserify'
         },
 
         browserify: {
+            bundle: true,
             watch: true,
+            plugin: [require('proxyquireify').plugin],
             debug: true
         },
+
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: true,
         browsers: ['PhantomJS'],
         captureTimeout: 60000,
-        singleRun: false
+        singleRun: false,
+        plugins: ['karma-*']
     };
 
     if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
