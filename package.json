@@ -22,7 +22,8 @@
   "author": "FINN.no AS",
   "contributors": [
     "Gregers Rygg <gregers@finn.no>",
-    "Michael Gunnulfsen <michael.gunnulfsen@finn.no>"
+    "Michael Gunnulfsen <michael.gunnulfsen@finn.no>",
+    "Sveinung Rosaker <sveinung.rosaker@finn.no>"
   ],
   "license": "MIT",
   "devDependencies": {
