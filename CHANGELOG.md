@@ -9,3 +9,4 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixes
 - Cross-domain-events upgraded to 0.4.0 for legacy IE support
 - IE11 empty url.protocol fix for allowed domains check
+- `overflow-x` / `overflow-y` support with getting sizes in browsers(firefox) that does not compute this back to `overflow: auto`
