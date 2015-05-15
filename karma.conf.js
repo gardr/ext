@@ -4,7 +4,6 @@ module.exports = function(config) {
         frameworks: ['mocha', 'es5-shim', 'browserify', 'sinon'],
 
         files: [
-            'node_modules/ie8/build/ie8.max.js',
             'test/**/*.js'
         ],
 
