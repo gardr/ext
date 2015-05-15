@@ -2,36 +2,51 @@
 var logToBanner = require('../../../lib/log/appender/banner.js');
 var expect = require('expect.js');
 
-describe('logToBanner', function() {
-    var logObj = {
-        msg: 'test log',
-        time: new Date().getTime(),
-        level: 4,
-        name: 'testName'
-    };
+describe('banner log appender', function() {
+    function getLogObj() {
+        var time = +new Date();
+        return {
+            logto: 'banner',
+            msg: 'test log ' + time,
+            time: time,
+            level: 4,
+            name: 'testName' + time
+        };
+    }
+
+    beforeEach(function() {
+        this.restoreTimer = logToBanner._setTimeoutFn(function triggerTimeoutSync(fn){
+            return fn();
+        });
+    });
 
     afterEach(function(){
+        this.restoreTimer();
         logToBanner.reset();
     });
 
     it('should render an overlay the first time it\'s called', function() {
+        var logObj = getLogObj();
         logToBanner(logObj);
+
         var output = document.getElementById('logoutput');
         expect(output).to.be.ok();
+
     });
 
-    it('should output a div for each log message', function(done) {
+    it('should output a div for each log message', function() {
+        logToBanner.reset();
+        var logObj = getLogObj();
         logToBanner(logObj);
 
-        setTimeout(function(){
-            var output = document.getElementById('logoutput');
-            expect(output.children.length).to.equal(1);
-            expect(output.children[0].textContent).to.have.string(logObj.msg);
-            done();
-        }, 51);
+        var output = document.getElementById('logoutput');
+
+        expect(output.children.length).to.equal(1);
+        expect(output.children[0].textContent||output.children[0].innerText).to.have.string(logObj.msg);
     });
 
-    it('should include script url and line for script errors', function(done) {
+    it('should include script url and line for script errors', function() {
+        logToBanner.reset();
         var errObj = {
             msg: 'Uncaught SyntaxError: Test',
             time: new Date().getTime(),
@@ -41,13 +56,11 @@ describe('logToBanner', function() {
             stack: []
         };
         logToBanner(errObj);
+        var output = document.getElementById('logoutput');
 
-        setTimeout(function(){
-            var output = document.getElementById('logoutput');
-            expect(output.children.length).to.equal(1);
-            expect(output.children[0].textContent).to.have.string(errObj.url + ':' + errObj.line);
-            done();
-        }, 51);
+        expect(output.children.length).to.equal(1);
+        var textEntry = output.children[0].textContent||output.children[0].innerText;
+        expect(textEntry).to.have.string(errObj.url + ':' + errObj.line);
 
     });
 });
