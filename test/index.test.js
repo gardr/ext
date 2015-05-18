@@ -16,6 +16,9 @@ var gardrExt = proxyquire('../lib/index.js', {
     './comClient.js': function com(a, b, c){
         return comClientSpy(a, b, c);
     },
+    './timer.js': function(fn) {
+        return fn();
+    },
     eventlistener: {
         add: function fake(ctx, name, fn){
             if (name === 'load') {
@@ -102,18 +105,15 @@ describe('Garðr ext - gardrExt', function () {
             return this.com;
         }.bind(this));
 
-        this.restore = gardrExt._mock(this.document, this.window, function (fn){
-            return fn();
-        });
+        gardrExt._mock(this.document, this.window);
 
         this.setUrlFragment();
     });
 
     afterEach(function () {
         this.iframe.contentDocument.close();
-        document.body.removeChild(this.iframe);
 
-        this.restore();
+        document.body.removeChild(this.iframe);
 
         try {
             delete window.gardr;
