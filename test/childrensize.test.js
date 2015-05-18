@@ -71,8 +71,8 @@ describe('childrenSize', function () {
     it('should ignore all but element nodes when calculating width and height', function () {
         var parent = createDiv('100%');
         parent.appendChild(createDiv('100px', '100px'));
-        var element = (createElement('span', '150px', '50px'));
-        element.style.display = 'inline-block';
+        var element = createElement('span', '150px', '50px');
+        element.style.display = 'block';
         element.innerHTML = 'count me, and I will make you fail';
         parent.appendChild(element);
         document.body.appendChild(parent);
