@@ -5,7 +5,11 @@ var expect = require('expect.js');
 var proxyquire = require('proxyquireify')(require);
 var eventlistener = require('eventlistener');
 
-var bannerAppender = require('../lib/log/appender/banner.js');
+var bannerAppender = proxyquire('../lib/log/appender/banner.js', {
+    '../../timer.js': function(fn) {
+        return fn();
+    }
+});
 
 var triggerOnLoad;
 var comClientSpy;
@@ -197,10 +201,6 @@ describe('Garðr ext - gardrExt', function () {
 
     it('should log to div by default', function () {
 
-        var restore = bannerAppender._setTimeoutFn(function triggerTimeoutSync2(fn){
-            fn();
-        });
-
         this.setUrlFragment({
             loglevel: 5, logto: 'banner'
         });
@@ -216,7 +216,8 @@ describe('Garðr ext - gardrExt', function () {
 
         expect(logDiv.children.length).to.equal(2);
 
-        restore();
+        bannerAppender.reset();
+
     });
 
     it('should document.write out a gardr container to the document', function () {

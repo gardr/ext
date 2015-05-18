@@ -1,5 +1,10 @@
 /*jshint expr: true*/
-var logToBanner = require('../../../lib/log/appender/banner.js');
+var proxyquire = require('proxyquireify')(require);
+var logToBanner = proxyquire('../../../lib/log/appender/banner.js', {
+    '../../timer.js': function (fn){
+        return fn();
+    }
+});
 var expect = require('expect.js');
 
 describe('banner log appender', function() {
@@ -14,24 +19,14 @@ describe('banner log appender', function() {
         };
     }
 
-    beforeEach(function() {
-        this.restoreTimer = logToBanner._setTimeoutFn(function triggerTimeoutSync(fn){
-            return fn();
-        });
-    });
-
-    afterEach(function(){
-        this.restoreTimer();
-        logToBanner.reset();
-    });
 
     it('should render an overlay the first time it\'s called', function() {
+        logToBanner.reset();
         var logObj = getLogObj();
         logToBanner(logObj);
 
         var output = document.getElementById('logoutput');
         expect(output).to.be.ok();
-
     });
 
     it('should output a div for each log message', function() {
@@ -42,7 +37,9 @@ describe('banner log appender', function() {
         var output = document.getElementById('logoutput');
 
         expect(output.children.length).to.equal(1);
-        expect(output.children[0].textContent||output.children[0].innerText).to.have.string(logObj.msg);
+
+        var text = output.children[0].textContent || output.children[0].innerText;
+        expect(text).to.have.string(logObj.msg);
     });
 
     it('should include script url and line for script errors', function() {
@@ -55,12 +52,13 @@ describe('banner log appender', function() {
             line: 123,
             stack: []
         };
+
         logToBanner(errObj);
+
         var output = document.getElementById('logoutput');
-
         expect(output.children.length).to.equal(1);
-        var textEntry = output.children[0].textContent||output.children[0].innerText;
-        expect(textEntry).to.have.string(errObj.url + ':' + errObj.line);
 
+        var text = output.children[0].textContent || output.children[0].innerText;
+        expect(text).to.have.string(errObj.url + ':' + errObj.line);
     });
 });
