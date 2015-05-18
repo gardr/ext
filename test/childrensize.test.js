@@ -70,8 +70,8 @@ describe('childrenSize', function () {
 
     it('should ignore all but element nodes when calculating width and height', function () {
         var parent = createDiv('100%');
-        parent.appendChild(createDiv('10px', '10px'));
-        var element = (createElement('span', '15px', '5px'));
+        parent.appendChild(createDiv('100px', '100px'));
+        var element = (createElement('span', '150px', '50px'));
         element.style.display = 'inline-block';
         element.innerHTML = 'count me, and I will make you fail';
         parent.appendChild(element);
@@ -82,8 +82,8 @@ describe('childrenSize', function () {
 
         var res = childrenSize(parent);
         expect(res).to.exist;
-        expect(res.width).to.equal(15);
-        expect(res.height).to.equal(15);
+        expect(res.width).to.equal(150);
+        expect(res.height).to.equal(150);
     });
 
 
