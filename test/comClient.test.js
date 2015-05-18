@@ -1,45 +1,59 @@
 /* jshint expr: true */
 var comClient   = require('../lib/comClient.js');
+var expect = require('expect.js');
 
 describe('comClient', function () {
-    var id = 'pos_id', win = window.top, origin = 'http://www.someorigin.com';
-    var xde;
+    var id = 'pos_id';
+    var win = window.top;
+    var origin = 'http://www.someorigin.com';
 
     beforeEach(function() {
-        xde = { sendTo : sinon.spy() };
-        comClient._setXde(xde);
+        this.xde = { sendTo : sinon.spy() };
+        comClient._setXde(this.xde);
     });
 
     it('should throw if comClient is called with wrong parameters', function () {
-        expect(comClient).to.throw();
+        expect(comClient).to.throwError();
         expect(function () {
             comClient(id, 'http://www.someOrigin.com', win);
-        }).to.throw();
+        }).to.throwError();
     });
 
     it('should return a handler if called with proper parameters', function() {
         var com = comClient(id, win, origin);
-        expect(com).to.exist;
+        expect(com).to.be.ok();
     });
 
     describe('rendered', function () {
         it('should call xde.sendTo once', function() {
             var com = comClient(id, win, origin);
             com.rendered();
-            expect(xde.sendTo).to.have.been.calledOnce;
+            expect(this.xde.sendTo.calledOnce).to.be.ok();
         });
 
         it('should call xde.sendTo with window, origin and ‘rendered’ as arguments', function() {
             var com = comClient(id, win, origin);
             com.rendered();
-            expect(xde.sendTo).to.have.been.calledWith(win, 'rendered', {id: id});
-            expect(xde.targetOrigin).to.equal(origin);
+            var args = this.xde.sendTo.getCall(0).args;
+            expect(args[0]).to.be(win);
+            expect(args[1]).to.be('rendered');
+            expect(args[2].id).to.be(id);
+            expect(this.xde.targetOrigin).to.equal(origin);
         });
 
         it('should call xde.sendTo with the opts object', function() {
             var com = comClient(id, win, origin);
-            com.rendered({width: 20, height: 10});
-            expect(xde.sendTo).to.have.been.calledWith(win, 'rendered', {id: id, width: 20, height: 10});
+            com.rendered({
+                width: 20,
+                height: 10
+            });
+
+            var args = this.xde.sendTo.getCall(0).args;
+            expect(args[0]).to.be(win);
+            expect(args[1]).to.be('rendered');
+            expect(args[2].id).to.be(id);
+            expect(args[2].width).to.be(20);
+            expect(args[2].height).to.be(10);
         });
     });
 });

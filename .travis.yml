@@ -1,3 +1,8 @@
 language: node_js
+script: npm run test-ci
 node_js:
   - "0.10"
+env:
+  global:
+    - secure: eUmbCTLmnB5OER/YH1/nOflLEyHwLI2IiufIOf8wWlRpwLYa3AK/88+/WuMeY9p+hy0CKeDtCwozuKjcSzmdQl/gqejHE55ix2qWvAGjVFwXh0YF2cySGLETZUHXf6uQf2U4fHpUeHqSe1a8xb2fubtKBu5PnPC3WaxvgLURsmg=
+    - secure: XH1W60VOz0dKzqlDhj1c5NpB3gLamYsHzkYQieRoExXkRcqXz9yUnHK99IYxSz+gCpQYn7xhueN8ll/yqgsI/MVvwHaAZ5LiXcx0dhADSDuCgD+1QqhKeI0v4OAbyxzrEsVNyTvN+MkMMJZgQxRR2E3ZeUwc3IQav+RzoLS5Jvo=

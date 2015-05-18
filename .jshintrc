@@ -4,7 +4,6 @@
         "describe"          : false,
         "it"                : false,
         "xit"               : false,
-        "expect"            : false,
         "beforeEach"        : false,
         "afterEach"         : false,
         "UIEvent"           : false,
