@@ -69,14 +69,29 @@ describe('Garðr ext - gardrExt', function () {
 
     beforeEach(function () {
 
+        function copy(obj) {
+            var res = {_copy: Date.now()};
+            for(var key in obj) {
+                try {
+                    res[key] = obj[key];
+                } catch(e){
+                    parent.console.log(e);
+                }
+            }
+            return res;
+        }
+
         this.iframe = createIframe();
 
         this.document = this.iframe.contentDocument;
-        this.window = this.iframe.contentWindow;
         this.document.open();
+        // we only copy this to be able to overwrite non-writeable keys, e.g. location in IE9
+        this.window = copy(this.iframe.contentWindow);
 
         // head
-        this.document.write(['<scr', 'ipt>', 'window.gardr = window.parent.gardr;', '</scr', 'ipt>'].join(''));
+        this.document.write(['<scr', 'ipt>',
+            'window.gardr = window.parent.gardr;', '</scr', 'ipt>'
+        ].join(''));
         // body
         this.document.write('<body><div id="gardr" style="overflow:hidden;">');
 
@@ -104,8 +119,14 @@ describe('Garðr ext - gardrExt', function () {
         };
 
         this.com = undefined;
+        this.comEvents = {};
         comClientSpy = this.comClientSpy = sinon.spy(function () {
-            this.com = {rendered: sinon.spy()};
+            this.com = {
+                rendered: sinon.spy(),
+                on: function(name, cb) {
+                    this.comEvents[name] = cb;
+                }.bind(this)
+            };
             return this.com;
         }.bind(this));
 
@@ -115,7 +136,7 @@ describe('Garðr ext - gardrExt', function () {
     });
 
     afterEach(function () {
-        this.iframe.contentDocument.close();
+        this.document.close();
 
         document.body.removeChild(this.iframe);
 
@@ -274,6 +295,30 @@ describe('Garðr ext - gardrExt', function () {
         });
         expect(this.com.rendered.calledOnce).to.be.ok();
         expect(assertion).to.be.ok();
+    });
+
+
+    it('should handle refresh commands', function() {
+        gardrExt(extOpts).inject();
+
+        var spy = sinon.spy();
+        this.window.location = {
+            replace: spy
+        };
+
+        triggerOnLoad();
+
+        expect(spy.callCount).to.be(0);
+
+        expect(this.comEvents.refresh).to.be.an('function');
+        var initialIframeHistoryLength = this.window.history.length;
+
+        this.comEvents.refresh({data: {hash: encodeURIComponent('{"test":123}')}});
+
+        expect(spy.callCount).to.be(1);
+        expect(initialIframeHistoryLength).to.be(this.window.history.length);
+        expect(spy.getCalls()[0].args[0]).to.have.string('refresh=true');
+
     });
 
     describe('plugins', function () {
