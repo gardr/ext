@@ -315,19 +315,9 @@ describe('Garðr ext - gardrExt', function () {
 
         this.comEvents.refresh({data: {hash: encodeURIComponent('{"test":123}')}});
 
-
-        if (spy === this.window.location.replace) {
-            expect(spy.callCount).to.be(1);
-            expect(initialIframeHistoryLength).to.be(this.window.history.length);
-            expect(spy.getCalls()[0].args[0]).to.have.string('refresh=true');
-        } else {
-            //
-            console.log('failed', this.window._copy);
-            expect(initialIframeHistoryLength).to.be(this.window.history.length);
-
-        }
-
-
+        expect(spy.callCount).to.be(1);
+        expect(initialIframeHistoryLength).to.be(this.window.history.length);
+        expect(spy.getCalls()[0].args[0]).to.have.string('refresh=true');
 
     });
 
