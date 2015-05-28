@@ -286,7 +286,7 @@ describe('Garðr ext - gardrExt', function () {
     it('should handle refresh commands', function() {
         gardrExt(extOpts).inject();
 
-        var spy = sinon.spy();;
+        var spy = sinon.spy();
         this.window.location.replace = spy;
 
         triggerOnLoad();
