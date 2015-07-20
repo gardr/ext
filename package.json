@@ -42,7 +42,7 @@
     "karma-sinon": "1.0.4",
     "mocha": "2.2.4",
     "normalize.css": "3.0.3",
-    "phantomjs2": "^2.0.0",
+    "phantomjs": "^1.9.17",
     "proxyquire": "1.4.0",
     "proxyquireify": "2.0.0",
     "shelljs": "0.3.0",
